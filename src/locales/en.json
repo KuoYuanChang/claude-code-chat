@@ -43,7 +43,7 @@
         "description": "Best for complex tasks and highest quality output"
       },
       "sonnet": {
-        "title": "Sonnet - Balanced model", 
+        "title": "Sonnet - Balanced model",
         "description": "Good balance of speed and capability"
       },
       "default": {
@@ -57,13 +57,13 @@
       "description": "Configure the intensity of thinking mode. Higher levels provide more detailed reasoning but consume more tokens.",
       "levels": {
         "think": "Think",
-        "thinkHard": "Think Hard", 
+        "thinkHard": "Think Hard",
         "thinkHarder": "Think Harder",
         "ultrathink": "Ultrathink"
       },
       "modeLabels": {
         "think": "Thinking Mode",
-        "thinkHard": "Think Hard Mode", 
+        "thinkHard": "Think Hard Mode",
         "thinkHarder": "Think Harder Mode",
         "ultrathink": "Ultrathink Mode"
       },
@@ -180,7 +180,7 @@
           "description": "Analyze this code for performance issues and suggest optimizations"
         },
         "securityReview": {
-          "title": "/security-review", 
+          "title": "/security-review",
           "description": "Review this code for security vulnerabilities"
         },
         "implementationReview": {
@@ -272,7 +272,7 @@
         "distro": "WSL Distribution",
         "nodePath": "Node.js Path in WSL",
         "nodePathHelper": "Find your node installation path in WSL by running:",
-        "claudePath": "Claude Path in WSL", 
+        "claudePath": "Claude Path in WSL",
         "claudePathHelper": "Find your claude installation path in WSL by running:"
       },
       "permissions": {
@@ -330,7 +330,7 @@
       "mcpServerDeleted": "✅ MCP server \"{name}\" deleted successfully",
       "mcpServerError": "❌ Error with MCP server: {error}",
       "backupError": "No workspace folder or backup repository available.",
-      "restoreSuccess": "Restored to commit: {message}",
+      "restoreCommitSuccess": "Restored to commit: {message}",
       "restoreFailure": "Failed to restore commit: {error}",
       "settingsUpdateFailure": "Failed to update settings",
       "modelSwitched": "Claude model switched to: {model}",
@@ -338,6 +338,13 @@
       "wslConfigChanged": "WSL configuration changed. Started a new Claude session.",
       "loginInTerminal": "Please login to Claude in the terminal, then come back to this chat to continue.",
       "checkTerminalForModel": "Check the terminal to update your default model configuration. Come back to this chat here after making changes.",
+      "claudeNotInstalled": "Install claude code first: https://www.anthropic.com/claude-code",
+      "claudeExecutionError": "Error running Claude: {error}",
+      "commitNotFound": "Commit not found",
+      "restoringFromBackup": "Restoring files from backup...",
+      "snippetSaveError": "Failed to save custom snippet",
+      "snippetNotFound": "Snippet not found",
+      "snippetDeleteError": "Failed to delete custom snippet",
       "failedToOpenFile": "Failed to open file: {filePath}",
       "failedToCreateImageFile": "Failed to create image file"
     },
@@ -375,14 +382,14 @@
       "yoloModeSubtitle": "Auto-allow all permissions",
       "decided": {
         "allowed": "You allowed this",
-        "denied": "You denied this", 
+        "denied": "You denied this",
         "alwaysAllowed": "You allowed this and set it to always allow"
       },
       "suggestion": "💡 This looks like a permission issue. You can enable Yolo Mode to skip all permission checks."
     },
     "fileTypes": {
       "file": "📄",
-      "html": "🌐", 
+      "html": "🌐",
       "css": "🎨",
       "json": "📋",
       "markdown": "📝",

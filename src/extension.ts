@@ -9,10 +9,10 @@ const exec = util.promisify(cp.exec);
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Claude Code Chat extension is being activated!');
-	
+
 	// Initialize i18n service
 	initializeI18n(context);
-	
+
 	const provider = new ClaudeChatProvider(context.extensionUri, context);
 
 	const disposable = vscode.commands.registerCommand('claude-code-chat.openChat', (column?: vscode.ViewColumn) => {
@@ -659,14 +659,16 @@ class ClaudeChatProvider {
 
 			// Check if claude command is not installed
 			if (error.message.includes('ENOENT') || error.message.includes('command not found')) {
+				const i18n = getI18n();
 				this._sendAndSaveMessage({
 					type: 'error',
-					data: 'Install claude code first: https://www.anthropic.com/claude-code'
+					data: i18n.t('ui.messages.claudeNotInstalled')
 				});
 			} else {
+				const i18n = getI18n();
 				this._sendAndSaveMessage({
 					type: 'error',
-					data: `Error running Claude: ${error.message}`
+					data: i18n.t('ui.messages.claudeExecutionError', { error: error.message })
 				});
 			}
 		});
@@ -938,7 +940,7 @@ class ClaudeChatProvider {
 		// Send message to webview about the config change
 		this._sendAndSaveMessage({
 			type: 'configChanged',
-			data: '⚙️ WSL configuration changed. Started a new session.'
+			data: i18n.t('ui.messages.configChanged')
 		});
 	}
 
@@ -1084,18 +1086,18 @@ class ClaudeChatProvider {
 
 	private async _restoreToCommit(commitSha: string): Promise<void> {
 		try {
+			const i18n = getI18n();
 			const commit = this._commits.find(c => c.sha === commitSha);
 			if (!commit) {
 				this._postMessage({
 					type: 'restoreError',
-					data: 'Commit not found'
+					data: i18n.t('ui.messages.commitNotFound')
 				});
 				return;
 			}
 
 			const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
 			if (!workspaceFolder || !this._backupRepoPath) {
-				const i18n = getI18n();
 				vscode.window.showErrorMessage(i18n.t('ui.messages.backupError'));
 				return;
 			}
@@ -1104,14 +1106,13 @@ class ClaudeChatProvider {
 
 			this._postMessage({
 				type: 'restoreProgress',
-				data: 'Restoring files from backup...'
+				data: i18n.t('ui.messages.restoringFromBackup')
 			});
 
 			// Restore files directly to workspace using git checkout
 			await exec(`git --git-dir="${this._backupRepoPath}" --work-tree="${workspacePath}" checkout ${commitSha} -- .`);
 
-			const i18n = getI18n();
-			vscode.window.showInformationMessage(i18n.t('ui.messages.restoreSuccess', { message: commit.message }));
+			vscode.window.showInformationMessage(i18n.t('ui.messages.restoreCommitSuccess', { message: commit.message }));
 
 			this._sendAndSaveMessage({
 				type: 'restoreSuccess',
@@ -1123,8 +1124,8 @@ class ClaudeChatProvider {
 
 		} catch (error: any) {
 			console.error('Failed to restore commit:', error.message);
-			const i18n = getI18n();
-			vscode.window.showErrorMessage(i18n.t('ui.messages.restoreFailure', { error: error.message }));
+			const catchI18n = getI18n();
+			vscode.window.showErrorMessage(catchI18n.t('ui.messages.restoreFailure', { error: error.message }));
 			this._postMessage({
 				type: 'restoreError',
 				data: `Failed to restore: ${error.message}`
@@ -1324,7 +1325,7 @@ class ClaudeChatProvider {
 		try {
 			// Read the original request to get tool name and input
 			const storagePath = this._context.storageUri?.fsPath;
-			if (!storagePath) {return;}
+			if (!storagePath) { return; }
 
 			const requestFileUri = vscode.Uri.file(path.join(storagePath, 'permission-requests', `${requestId}.request`));
 
@@ -1387,7 +1388,7 @@ class ClaudeChatProvider {
 
 	private getCommandPattern(command: string): string {
 		const parts = command.trim().split(/\s+/);
-		if (parts.length === 0) {return command;}
+		if (parts.length === 0) { return command; }
 
 		const baseCmd = parts[0];
 		const subCmd = parts.length > 1 ? parts[1] : '';
@@ -1516,7 +1517,7 @@ class ClaudeChatProvider {
 	private async _removePermission(toolName: string, command: string | null): Promise<void> {
 		try {
 			const storagePath = this._context.storageUri?.fsPath;
-			if (!storagePath) {return;}
+			if (!storagePath) { return; }
 
 			const permissionsUri = vscode.Uri.file(path.join(storagePath, 'permission-requests', 'permissions.json'));
 			let permissions: any = { alwaysAllow: {} };
@@ -1562,7 +1563,7 @@ class ClaudeChatProvider {
 	private async _addPermission(toolName: string, command: string | null): Promise<void> {
 		try {
 			const storagePath = this._context.storageUri?.fsPath;
-			if (!storagePath) {return;}
+			if (!storagePath) { return; }
 
 			const permissionsUri = vscode.Uri.file(path.join(storagePath, 'permission-requests', 'permissions.json'));
 			let permissions: any = { alwaysAllow: {} };
@@ -1772,9 +1773,10 @@ class ClaudeChatProvider {
 			console.log('Saved custom snippet:', snippet.name);
 		} catch (error) {
 			console.error('Error saving custom snippet:', error);
+			const i18n = getI18n();
 			this._postMessage({
 				type: 'error',
-				data: 'Failed to save custom snippet'
+				data: i18n.t('ui.messages.snippetSaveError')
 			});
 		}
 	}
@@ -1794,16 +1796,18 @@ class ClaudeChatProvider {
 
 				console.log('Deleted custom snippet:', snippetId);
 			} else {
+				const i18n = getI18n();
 				this._postMessage({
 					type: 'error',
-					data: 'Snippet not found'
+					data: i18n.t('ui.messages.snippetNotFound')
 				});
 			}
 		} catch (error) {
 			console.error('Error deleting custom snippet:', error);
+			const i18n = getI18n();
 			this._postMessage({
 				type: 'error',
-				data: 'Failed to delete custom snippet'
+				data: i18n.t('ui.messages.snippetDeleteError')
 			});
 		}
 	}
@@ -2021,9 +2025,10 @@ class ClaudeChatProvider {
 			});
 
 			// Send stop confirmation message directly to UI and save
+			const i18n = getI18n();
 			this._sendAndSaveMessage({
 				type: 'error',
-				data: '⏹️ Claude code was stopped.'
+				data: i18n.t('ui.messages.stopped')
 			});
 
 			console.log('Claude process termination initiated');
@@ -2109,9 +2114,9 @@ class ClaudeChatProvider {
 
 						const message = messages[i];
 
-						if(message.messageType === 'permissionRequest'){
+						if (message.messageType === 'permissionRequest') {
 							const isLast = i === messages.length - 1;
-							if(!isLast){
+							if (!isLast) {
 								continue;
 							}
 						}
@@ -2220,16 +2225,16 @@ class ClaudeChatProvider {
 		try {
 			const i18n = getI18n();
 			await i18n.setLanguage(languageCode);
-			
+
 			// Send updated language data to webview
 			this._sendCurrentLanguage();
-			
+
 			// Send updated ready message with new language
 			this._postMessage({
 				type: 'ready',
 				data: this._isProcessing ? i18n.t('ui.status.processing') : i18n.t('ui.status.ready')
 			});
-			
+
 			console.log(`Language changed to: ${languageCode}`);
 		} catch (error) {
 			console.error('Error setting language:', error);
@@ -2317,15 +2322,13 @@ class ClaudeChatProvider {
 
 		// Show info message
 		const i18n = getI18n();
-		vscode.window.showInformationMessage(
-			i18n.t('ui.messages.checkTerminalForModel'),
-			'OK'
-		);
+		const message = i18n.t('ui.messages.checkTerminalForModel');
+		vscode.window.showInformationMessage(message, 'OK');
 
 		// Send message to UI about terminal
 		this._postMessage({
 			type: 'terminalOpened',
-			data: 'Check the terminal to update your default model configuration. Come back to this chat here after making changes.'
+			data: message
 		});
 	}
 
@@ -2355,7 +2358,13 @@ class ClaudeChatProvider {
 
 		// Get translated message
 		const i18n = getI18n();
-		const message = i18n.t('ui.messages.slashCommandExecuted', { command });
+		let message: string;
+
+		if (command === 'model') {
+			message = i18n.t('ui.messages.checkTerminalForModel');
+		} else {
+			message = i18n.t('ui.messages.slashCommandExecuted', { command });
+		}
 
 		// Show info message
 		vscode.window.showInformationMessage(message, 'OK');

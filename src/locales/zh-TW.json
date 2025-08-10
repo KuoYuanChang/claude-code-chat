@@ -43,7 +43,7 @@
         "description": "最適合複雜任務和最高品質的輸出"
       },
       "sonnet": {
-        "title": "Sonnet - 平衡模型", 
+        "title": "Sonnet - 平衡模型",
         "description": "速度與能力的良好平衡"
       },
       "default": {
@@ -57,13 +57,13 @@
       "description": "設定思考模式的強度。更高的級別提供更詳細的推理，但會消耗更多的代幣。",
       "levels": {
         "think": "思考",
-        "thinkHard": "深度思考", 
+        "thinkHard": "深度思考",
         "thinkHarder": "更深度思考",
         "ultrathink": "超級思考"
       },
       "modeLabels": {
         "think": "思考模式",
-        "thinkHard": "深度思考模式", 
+        "thinkHard": "深度思考模式",
         "thinkHarder": "更深度思考模式",
         "ultrathink": "超級思考模式"
       },
@@ -180,7 +180,7 @@
           "description": "分析此程式碼的效能問題並建議最佳化方案"
         },
         "securityReview": {
-          "title": "/security-review", 
+          "title": "/security-review",
           "description": "檢查此程式碼的安全性漏洞"
         },
         "implementationReview": {
@@ -272,7 +272,7 @@
         "distro": "WSL 發行版",
         "nodePath": "WSL 中的 Node.js 路徑",
         "nodePathHelper": "執行以下指令在 WSL 中找到您的 node 安裝路徑：",
-        "claudePath": "WSL 中的 Claude 路徑", 
+        "claudePath": "WSL 中的 Claude 路徑",
         "claudePathHelper": "執行以下指令在 WSL 中找到您的 claude 安裝路徑："
       },
       "permissions": {
@@ -330,7 +330,6 @@
       "mcpServerDeleted": "✅ MCP 伺服器 \"{name}\" 刪除成功",
       "mcpServerError": "❌ MCP 伺服器錯誤：{error}",
       "backupError": "無可用的工作區資料夾或備份存儲庫。",
-      "restoreSuccess": "已還原至提交：{message}",
       "restoreFailure": "還原提交失敗：{error}",
       "settingsUpdateFailure": "更新設定失敗",
       "modelSwitched": "Claude 模型已切換至：{model}",
@@ -338,6 +337,14 @@
       "wslConfigChanged": "WSL 設定已變更。開始新工作階段。",
       "loginInTerminal": "請在終端機中登入 Claude，然後返回此對話以繼續。",
       "checkTerminalForModel": "請檢查終端機以更新您的預設模型設定。變更後請回到此對話。",
+      "claudeNotInstalled": "請先安裝 claude code：https://www.anthropic.com/claude-code",
+      "claudeExecutionError": "執行 Claude 時發生錯誤：{error}",
+      "commitNotFound": "找不到提交",
+      "restoringFromBackup": "正在從備份還原檔案...",
+      "snippetSaveError": "儲存自訂片段失敗",
+      "snippetNotFound": "找不到片段",
+      "snippetDeleteError": "刪除自訂片段失敗",
+      "restoreCommitSuccess": "已還原至提交：{message}",
       "failedToOpenFile": "開啟檔案失敗：{filePath}",
       "failedToCreateImageFile": "建立圖片檔案失敗"
     },
@@ -375,14 +382,14 @@
       "yoloModeSubtitle": "自動允許所有權限",
       "decided": {
         "allowed": "您已允許此操作",
-        "denied": "您已拒絕此操作", 
+        "denied": "您已拒絕此操作",
         "alwaysAllowed": "您已允許此操作並設為永遠允許"
       },
       "suggestion": "💡 這看起來像是權限問題。您可以啟用 Yolo 模式來跳過所有權限檢查。"
     },
     "fileTypes": {
       "file": "📄",
-      "html": "🌐", 
+      "html": "🌐",
       "css": "🎨",
       "json": "📋",
       "markdown": "📝",
